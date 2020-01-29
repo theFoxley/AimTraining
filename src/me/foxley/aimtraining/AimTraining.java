@@ -1,5 +1,6 @@
 package me.foxley.aimtraining;
 
+import me.foxley.aimtraining.training.TrainingInterface;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -14,12 +15,9 @@ public class AimTraining extends JavaPlugin {
     }
 
     public void setPlayerInSpawn(Player player) {
+        player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
         player.teleport(player.getWorld().getSpawnLocation());
-
-    }
-
-    public boolean isInSpawn(Player player) {
-        return player.getGameMode() == GameMode.ADVENTURE;
+        player.getInventory().setItem(4, TrainingInterface.getItem());
     }
 }

@@ -3,6 +3,8 @@ package me.foxley.aimtraining.training;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 
@@ -12,36 +14,38 @@ public class TrainingBlock {
     private int y;
     private int z;
 
-    public TrainingBlock(World world, int x_, int y_, int z_) {
-        this.x = x_;
-        this.y = y_;
-        this.z = z_;
+    public TrainingBlock(Player player, Location position) {
+        this.x = position.getBlockX();
+        this.y = position.getBlockY();
+        this.z = position.getBlockZ();
 
-        this.createBlock(world);
+        this.createBlock(player);
     }
 
-    private void createBlock(World world) {
-        world.getBlockAt(x, y, z).setType(Material.REDSTONE_BLOCK);
+    @SuppressWarnings("deprecation")
+    private void createBlock(Player player) {
+        player.sendBlockChange(new Location(player.getWorld(), x, y, z), Material.REDSTONE_BLOCK, (byte) 0);
     }
 
     public boolean isBlockHit(Location source, Vector direction) {
-        return checkXCollision(source, direction, x) || checkXCollision(source, direction,x+1)
-                || checkYCollision(source, direction, y) || checkYCollision(source, direction,y+1)
-                || checkZCollision(source, direction, z) || checkZCollision(source, direction,z+1);
+        return checkXCollision(source, direction, x) || checkXCollision(source, direction, x + 1)
+                || checkYCollision(source, direction, y) || checkYCollision(source, direction, y + 1)
+                || checkZCollision(source, direction, z) || checkZCollision(source, direction, z + 1);
     }
 
-    public void changeBlock(World world, Vector newPosition) {
-        this.destroyBlock(world);
+    public void changeBlock(Player player, Location newPosition) {
+        this.destroyBlock(player);
 
         this.x = newPosition.getBlockX();
         this.y = newPosition.getBlockY();
         this.z = newPosition.getBlockZ();
 
-        this.createBlock(world);
+        this.createBlock(player);
     }
 
-    public void destroyBlock(World world) {
-        world.getBlockAt(x, y, z).setType(Material.AIR);
+    @SuppressWarnings("deprecation")
+    public void destroyBlock(Player player) {
+        player.sendBlockChange(new Location(player.getWorld(), x, y, z), Material.AIR, (byte) 0);
     }
 
     private boolean checkXCollision(Location source, Vector direction, int xSide) {
