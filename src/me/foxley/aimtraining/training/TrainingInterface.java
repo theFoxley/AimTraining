@@ -1,6 +1,6 @@
 package me.foxley.aimtraining.training;
 
-import me.foxley.aimtraining.training.modes.ModeType;
+import me.foxley.aimtraining.training.tasks.TrainingTaskEnum;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -32,9 +32,9 @@ public class TrainingInterface {
     public void openMenu(Player player) {
         Inventory inventory = Bukkit.createInventory(null, 9*5, inventoryName);
 
-        ModeType[] generators = ModeType.values();
+        TrainingTaskEnum[] generators = TrainingTaskEnum.values();
 
-        for(ModeType generator : generators) {
+        for(TrainingTaskEnum generator : generators) {
             inventory.setItem(generator.getPosition(), generator.getItem());
         }
 

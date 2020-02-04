@@ -10,14 +10,20 @@ public class AimTraining extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        super.onEnable();
+        Bukkit.getWorlds().get(0).setAutoSave(false);
         Bukkit.getPluginManager().registerEvents(new EventsManager(this), this);
     }
 
     public void setPlayerInSpawn(Player player) {
+        player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+
         player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
-        player.teleport(player.getWorld().getSpawnLocation());
+        player.teleport(player.getWorld().getSpawnLocation().add(0.5, 0, 0.5));
         player.getInventory().setItem(4, TrainingInterface.getItem());
+
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            player.showPlayer(p);
+        }
     }
 }

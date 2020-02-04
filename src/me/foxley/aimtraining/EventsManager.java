@@ -2,8 +2,7 @@ package me.foxley.aimtraining;
 
 import me.foxley.aimtraining.training.TrainingInterface;
 import me.foxley.aimtraining.training.TrainingManager;
-import me.foxley.aimtraining.training.modes.Mode;
-import me.foxley.aimtraining.training.modes.ModeType;
+import me.foxley.aimtraining.training.tasks.TrainingTaskEnum;
 import me.foxley.aimtraining.utils.ChatUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -42,8 +41,8 @@ public class EventsManager implements Listener {
     public void onPlayerQuit(PlayerQuitEvent e) {
         Player player = e.getPlayer();
 
-        if(trainingManager.isTraining(player)) {
-            trainingManager.unregisterTraining(player);
+        if (trainingManager.isTraining(player)) {
+            trainingManager.unregisterTraining(player.getUniqueId());
         }
 
         e.setQuitMessage(ChatUtil.getQuitMessage(player));
@@ -55,9 +54,9 @@ public class EventsManager implements Listener {
         Action a = e.getAction();
         ItemStack item = e.getItem();
 
-        if(!trainingManager.isTraining(player)) {
-            if((a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) && item != null) {
-                if(item.getType() == TrainingInterface.material) { // On ouvre le menu
+        if (!trainingManager.isTraining(player)) {
+            if ((a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) && item != null) {
+                if (item.getType() == TrainingInterface.material) { // On ouvre le menu
                     e.setCancelled(true);
                     trainingInterface.openMenu(player);
                 }
@@ -69,15 +68,15 @@ public class EventsManager implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if(event.getClickedInventory() != null) { // On a cliqué à l'intérieur de l'inventaire
-            if(event.getWhoClicked() instanceof Player) {
+        if (event.getClickedInventory() != null) { // On a cliqué à l'intérieur de l'inventaire
+            if (event.getWhoClicked() instanceof Player) {
                 Player player = (Player) event.getWhoClicked();
-                if(event.getClickedInventory().getName().equalsIgnoreCase(trainingInterface.inventoryName)) { // On a cliqué sur le bon inventaire
+                if (event.getClickedInventory().getName().equalsIgnoreCase(trainingInterface.inventoryName)) { // On a cliqué sur le bon inventaire
                     event.setCancelled(true);
-                    ModeType modeType = ModeType.getModeTypeAtPosition(event.getSlot());
-                    if(modeType !=null) {
-                        player.sendMessage(ChatColor.BLUE + "Mode sélectionné : " + modeType.getName());
-                        trainingManager.registerTraining(player, modeType.getMode());
+                    TrainingTaskEnum trainingTaskEnum = TrainingTaskEnum.getModeTypeAtPosition(event.getSlot());
+                    if (trainingTaskEnum != null) {
+                        player.sendMessage(ChatColor.BLUE + "Mode sélectionné : " + trainingTaskEnum.getName());
+                        trainingManager.registerTraining(player, trainingTaskEnum.getMode());
                         player.closeInventory();
                     }
                 }

@@ -23,8 +23,8 @@ public class TrainingBoard {
         precision.addEntry(ChatColor.WHITE + "" + ChatColor.WHITE);
         time.addEntry(ChatColor.GRAY + "" + ChatColor.WHITE);
 
-        precision.setPrefix(ChatColor.GOLD + "%");
-        time.setPrefix(ChatColor.GOLD + "s");
+        precision.setPrefix(ChatColor.GOLD + "100%");
+        time.setPrefix(ChatColor.GOLD + "0s");
 
         objective.getScore("").setScore(5);
         objective.getScore(ChatColor.BLUE + "> Precision").setScore(4);
